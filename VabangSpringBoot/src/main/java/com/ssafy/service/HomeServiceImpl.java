@@ -34,4 +34,9 @@ public class HomeServiceImpl implements HomeService {
     public List<HouseSearchResponseDTO> searchHouseByRegion(RegionDTO region) throws Exception{
         return homeMapper.searchHouseByRegion(region);
     }
+
+    @Override
+    public List<HouseDeal> getDealList(String aptCode) throws Exception{
+        return homeMapper.getDealList(aptCode);
+    }
 }

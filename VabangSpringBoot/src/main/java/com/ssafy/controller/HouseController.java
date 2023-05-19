@@ -1,5 +1,6 @@
 package com.ssafy.controller;
 
+import com.ssafy.domain.HouseDeal;
 import com.ssafy.domain.HouseSearchResponseDTO;
 import com.ssafy.domain.RegionDTO;
 import com.ssafy.service.HomeService;
@@ -35,6 +36,12 @@ public class HouseController {
     public List<HouseSearchResponseDTO> getList(@RequestBody RegionDTO region) throws Exception {
         List<HouseSearchResponseDTO> houseInfos = homeService.searchHouseByRegion(region);
         return houseInfos;
+    }
+
+    @GetMapping(value = "/deallist/{aptcode}")
+    public List<HouseDeal> getDealList(@PathVariable String aptcode) throws Exception{
+        List<HouseDeal> dealList = homeService.getDealList(aptcode);
+        return dealList;
     }
 
 }
