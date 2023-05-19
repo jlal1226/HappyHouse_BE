@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.mapper.InterestSaleMapper">
+
+    <insert id = "insertInterest" parameterType="map">
+        insert into interest_sale(user_id, deal_no) values(#{userId}, #{dealNo})
+    </insert>
+    <delete id = "deleteInterest" parameterType="map">
+        delete from interest_sale where user_id=#{userId} and deal_no=#{dealNo}
+    </delete>
+    <select id = "showInterests" parameterType="string" resultType="InterestSaleInfo">
+        select houseDealNo, apartmentName, address, dealAmount, floor, area
+        from interest_sale i inner join (
+            select hd.no houseDealNo, hd.area area, hd.dealAmount dealAmount, hd.floor floor, tmp.apartmentName, tmp.address address
+            from housedeal hd inner join (SELECT hi.aptCode, hi.apartmentName, concat(sidoName," ",gugunName, " ",dong, " ",roadName," ",jibun)  address
+                                          FROM houseinfo hi INNER JOIN dongcode dc ON hi.dongCode = dc.dongCode
+                                          where dc.dongcode = hi.dongcode) tmp
+                                         on hd.aptcode = tmp.aptcode
+        ) j
+        on i.deal_no = j.houseDealNo
+        where i.user_id = #{userId}
+    </select>
+</mapper>

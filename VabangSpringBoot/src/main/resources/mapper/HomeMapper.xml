@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.mapper.HomeMapper">
+    <select id = "getHouseSearchResponses" parameterType="map" resultType = "HouseSearchResponseDTO">
+        select round(avg(hd.dealAmount), 3) avgDealAmount, round(avg(hd.area)) avgArea, max(hd.floor) maxFloor, hd.aptCode aptCode, tmp.lat lat, tmp.lng lng, tmp.apartmentName apartmentName, tmp.address address
+        from housedeal hd inner join (SELECT hi.aptCode, hi.apartmentName, concat(sidoName," ",gugunName, " ",dong, " ",roadName," ",jibun)  address, lng, lat
+                                        FROM houseinfo hi
+                                        INNER JOIN dongcode dc ON hi.dongCode = dc.dongCode
+                                        WHERE dc.dongName like #{keyword}) tmp on hd.aptCode = tmp.aptCode
+        group by hd.aptCode
+    </select>
+</mapper>

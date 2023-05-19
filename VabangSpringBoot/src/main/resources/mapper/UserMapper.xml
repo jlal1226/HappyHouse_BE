@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.mapper.UserMapper">
+    <select id="login" parameterType="LoginDto" resultType="User">
+        select userId, username from user where userId = #{userId} and password = #{password}
+    </select>
+
+    <insert id="join" parameterType="JoinDto">
+        insert into user values (null, #{userId}, #{password}, #{username}, #{address})
+    </insert>
+
+    <select id="findUserByUserId" parameterType="String" resultType="int">
+        select count(*) from user where userId = #{userid}
+    </select>
+
+    <delete id="delete" parameterType="String">
+        delete from user where userId = #{userId}
+    </delete>
+
+    <update id="modify" parameterType="UserModifyRequestDto">
+        update user set userId = #{userId}, username= #{username}, address = #{address} where userId = #{userId}
+    </update>
+
+
+</mapper>
