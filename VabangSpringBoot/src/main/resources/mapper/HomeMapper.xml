@@ -11,4 +11,29 @@
                                         WHERE dc.dongName like #{keyword}) tmp on hd.aptCode = tmp.aptCode
         group by hd.aptCode
     </select>
+
+    <select id = "getRegions" resultType = "RegionDTO">
+		select sidoName, gugunName, dongName
+		from dongcode dc inner join (
+			select distinct dongCode
+			from houseinfo hi inner join (
+				select distinct aptCode
+				from housedeal hd
+			) tmp on tmp.aptCode = hi.aptCode
+		)tmp2 on dc.dongCode = tmp2.dongCode;
+    </select>
+
+    <select id = "searchHouseByRegion" resultType= "HouseSearchResponseDTO">
+        select round(avg(hd.dealAmount), 3) avgDealAmount, round(avg(hd.area)) avgArea, max(hd.floor) maxFloor, hd.aptCode aptCode, tmp.lat lat, tmp.lng lng, tmp.apartmentName apartmentName, tmp.address address
+        from housedeal hd inner join (SELECT hi.aptCode, hi.apartmentName, concat(sidoName," ",gugunName, " ",dong, " ",roadName," ",jibun)  address, lng, lat
+                                      FROM houseinfo hi
+                                      INNER JOIN dongcode dc ON hi.dongCode = dc.dongCode
+                                      WHERE dc.sidoName = #{sidoName}
+                                      and dc.gugunName = #{gugunName}
+                                      and dc.dongName  = #{dongName}
+                                      ) tmp on hd.aptCode = tmp.aptCode
+        group by hd.aptCode
+    </select>
+
+
 </mapper>

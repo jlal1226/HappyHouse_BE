@@ -1,6 +1,7 @@
 package com.ssafy.controller;
 
 import com.ssafy.domain.HouseSearchResponseDTO;
+import com.ssafy.domain.RegionDTO;
 import com.ssafy.service.HomeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -8,8 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@RequestMapping("/myhome")
+@RequestMapping("/")
 @RestController
+@CrossOrigin("*")
 public class HouseController {
 
     @Autowired
@@ -20,9 +22,19 @@ public class HouseController {
         Map<String, String> keywordMap = new HashMap<>();
         keywordMap.put("keyword", keyword);
         List<HouseSearchResponseDTO> houseInfos = homeService.getHouseSearchResponses(keywordMap);
-        System.out.println("asd");
         return houseInfos;
     }
+    
+    @GetMapping(value = "/allregion")
+    public List<RegionDTO> getRegions() throws Exception {
+    	List<RegionDTO> regions = homeService.getRegions();
+    	return regions;
+    }
 
+    @PostMapping(value = "/search/")
+    public List<HouseSearchResponseDTO> getList(@RequestBody RegionDTO region) throws Exception {
+        List<HouseSearchResponseDTO> houseInfos = homeService.searchHouseByRegion(region);
+        return houseInfos;
+    }
 
 }
