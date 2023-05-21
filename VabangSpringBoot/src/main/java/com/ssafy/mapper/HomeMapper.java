@@ -1,5 +1,6 @@
 package com.ssafy.mapper;
 
+import com.ssafy.domain.HouseDeal;
 import com.ssafy.domain.HouseSearchResponseDTO;
 import com.ssafy.domain.RegionDTO;
 
@@ -17,4 +18,5 @@ public interface HomeMapper {
     int showDealDetail(String homeDealNo);//-> return type 바꿔야됨
     List<RegionDTO> getRegions();
     List<HouseSearchResponseDTO> searchHouseByRegion(RegionDTO region);
+    List<HouseDeal> getDealList(String aptCode);
 }

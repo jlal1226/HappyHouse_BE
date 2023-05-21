@@ -1,5 +1,6 @@
 package com.ssafy.service;
 
+import com.ssafy.domain.HouseDeal;
 import com.ssafy.domain.HouseSearchResponseDTO;
 import com.ssafy.domain.RegionDTO;
 
@@ -12,4 +13,5 @@ public interface HomeService {
     List<HouseSearchResponseDTO> getHouseSearchResponses(Map<String, String> keywordMap) throws Exception;
     List<RegionDTO> getRegions() throws Exception;
     List<HouseSearchResponseDTO> searchHouseByRegion(RegionDTO region) throws Exception;
+    List<HouseDeal> getDealList(String aptCode) throws Exception;
 }
