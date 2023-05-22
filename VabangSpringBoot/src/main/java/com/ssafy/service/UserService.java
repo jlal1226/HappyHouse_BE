@@ -6,7 +6,7 @@ import com.ssafy.domain.user.User;
 import com.ssafy.domain.user.UserModifyRequestDto;
 
 public interface UserService {
-    User loginProcess(LoginDto dto);
+    User loginProcess(LoginDto dto) throws Exception;
 
     int join(JoinDto dto);
 

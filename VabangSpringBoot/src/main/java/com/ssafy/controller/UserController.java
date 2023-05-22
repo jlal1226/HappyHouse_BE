@@ -4,39 +4,63 @@ import com.ssafy.domain.user.JoinDto;
 import com.ssafy.domain.user.LoginDto;
 import com.ssafy.domain.user.User;
 import com.ssafy.domain.user.UserModifyRequestDto;
+import com.ssafy.service.JwtService;
 import com.ssafy.service.UserService;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
     private final UserService service;
+    private final JwtService jwtService;
 
     @Autowired
-    public UserController(UserService service) {
+    public UserController(UserService service, JwtService jwtService) {
         this.service = service;
+        this.jwtService = jwtService;
     }
 
-    // 로그인
-    @GetMapping("/login")
-    public String login() {
-        return "loginForm";
-    }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginDto dto, HttpSession session) {
-        User user = service.loginProcess(dto);
-        if (user != null) {
-            session.setAttribute("user", user);
-            return new ResponseEntity<>("login success", HttpStatus.OK);
+    public ResponseEntity<Map<String, Object>> login(@RequestBody LoginDto dto) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+        log.info("로그인 시도됨");
+        try {
+            User user = service.loginProcess(dto);
+            if (user != null) {
+                String accessToken = jwtService.createAccessToken("userid", user.getUserId());
+                String refreshToken = jwtService.createRefreshToken("userid", user.getUserId());
+                service.saveRefreshToken(user.getUserId(), refreshToken);
+                log.debug("로그인 accessToken 정보 : {}", accessToken);
+                log.debug("로그인 refreshToken 정보 : {}", refreshToken);
+                resultMap.put("access-token", accessToken);
+                resultMap.put("refresh-token", refreshToken);
+                resultMap.put("message", "SUCCESS");
+                status = HttpStatus.ACCEPTED;
+            } else {
+                resultMap.put("message", "FAIL");
+                status = HttpStatus.ACCEPTED;
+            }
+
+        } catch (Exception e) {
+            log.error("로그인 실패 : {}", e);
+            resultMap.put("message", e.getMessage());
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
-        return new ResponseEntity<>("login fail", HttpStatus.NOT_FOUND);
+
+        return new ResponseEntity<>(resultMap, status);
     }
 
     // 로그아웃
@@ -95,5 +119,6 @@ public class UserController {
         session.invalidate();
         return new ResponseEntity<>("delete success", HttpStatus.OK);
     }
+
 
 }

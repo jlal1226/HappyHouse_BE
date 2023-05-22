@@ -11,7 +11,7 @@ import java.util.Map;
 
 @Mapper
 public interface UserMapper {
-    User login(LoginDto dto);
+    User login(LoginDto dto) throws SQLException;
 
     int join(JoinDto dto);
 

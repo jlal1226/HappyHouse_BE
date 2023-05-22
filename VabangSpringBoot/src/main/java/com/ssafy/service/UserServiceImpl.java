@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User loginProcess(LoginDto dto) {
+    public User loginProcess(LoginDto dto) throws Exception{
         return mapper.login(dto);
     }
 
