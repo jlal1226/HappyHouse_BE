@@ -15,5 +15,6 @@ public interface HomeMapper {
 
     List<HouseSearchResponseDTO> getList(SearchDTO search);
     List<RegionDTO> getRegions();
+
     List<HouseDeal> getDealList(String aptCode);
 }
