@@ -5,14 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
 @Getter
-@NoArgsConstructor
+@Setter
 @AllArgsConstructor
-public class HouseSearchResponseDTO {
-    String aptCode;
-    String address;
-    String lat;
-    String lng;
-    String apartmentName;
+@NoArgsConstructor
+public class SearchDTO extends RegionDTO{
+	String keyword;
 }
