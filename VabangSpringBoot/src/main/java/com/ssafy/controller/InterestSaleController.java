@@ -23,7 +23,7 @@ public class InterestSaleController {
         if (user == null) return 0;
         String userId = user.getUserId();
         */
-        String userId = "admin";
+        String userId = "test";
         Map<String, String> dealUserMap = new HashMap<>();
         dealUserMap.put("userId", userId);
         dealUserMap.put("aptCode", aptCode);
@@ -36,7 +36,7 @@ public class InterestSaleController {
         if (user == null) return 0;
         String userId = user.getUserId();
          */
-        String userId = "admin";
+        String userId = "test";
         Map<String, String> dealUserMap = new HashMap<>();
         dealUserMap.put("userId", userId);
         dealUserMap.put("aptCode", aptCode);
@@ -45,7 +45,7 @@ public class InterestSaleController {
 
     @GetMapping("/list")
     List<InterestSaleInfo> getUserInterestList() {
-        String userId = "admin";
+        String userId = "test";
         if (userId == null) return null;
 
         List<InterestSaleInfo> list = interestSaleService.getUserInterestList(userId);
@@ -55,7 +55,7 @@ public class InterestSaleController {
 
     @GetMapping("/getInterests")
     List<InterestSaleDTO> getInterests(){
-        String userId = "admin";
+        String userId = "test";
         if (userId == null) return null;
 
         List<InterestSaleDTO> list = interestSaleService.getInterests(userId);
