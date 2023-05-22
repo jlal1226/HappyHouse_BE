@@ -35,5 +35,8 @@
         group by hd.aptCode
     </select>
 
-
+    <select id = "getDealList" resultType="HouseDeal" parameterType="string">
+        select * from housedeal
+        where aptcode = #{aptcode}
+    </select>
 </mapper>
