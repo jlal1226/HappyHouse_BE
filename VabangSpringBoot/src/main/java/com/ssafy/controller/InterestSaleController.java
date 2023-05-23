@@ -2,6 +2,7 @@ package com.ssafy.controller;
 
 import com.ssafy.domain.interest.InterestSaleDTO;
 import com.ssafy.domain.interest.InterestSaleInfo;
+import com.ssafy.domain.user.User;
 import com.ssafy.service.InterestSaleService;
 import java.util.HashMap;
 import java.util.List;
@@ -11,19 +12,15 @@ import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/interest")
 @RestController
-@CrossOrigin("*")
 public class InterestSaleController {
 
     @Autowired
     InterestSaleService interestSaleService;
 
     @PostMapping("/insert")
-    int insertInterest(@RequestBody String aptCode){//(@SessionAttribute User user, @RequestParam String aptCode){
-        /*
+    int insertInterest(@RequestBody String aptCode, @RequestBody User user){
         if (user == null) return 0;
         String userId = user.getUserId();
-        */
-        String userId = "test";
         Map<String, String> dealUserMap = new HashMap<>();
         dealUserMap.put("userId", userId);
         dealUserMap.put("aptCode", aptCode);
@@ -31,33 +28,27 @@ public class InterestSaleController {
     }
 
     @DeleteMapping("/delete/{aptCode}")
-    int deleteInterest(@PathVariable String aptCode) {//(@SessionAttribute User user, @RequestParam String aptCode){
-        /*
+    int deleteInterest(@PathVariable String aptCode, @RequestBody User user) {
         if (user == null) return 0;
         String userId = user.getUserId();
-         */
-        String userId = "test";
         Map<String, String> dealUserMap = new HashMap<>();
         dealUserMap.put("userId", userId);
         dealUserMap.put("aptCode", aptCode);
         return interestSaleService.deleteInterest(dealUserMap);
     }
 
-    @GetMapping("/list")
-    List<InterestSaleInfo> getUserInterestList() {
-        String userId = "test";
-        if (userId == null) return null;
-
+    @PostMapping("/list")
+    List<InterestSaleInfo> getUserInterestList(@RequestBody User user) {
+        if (user == null) return null;
+        String userId = user.getUserId();
         List<InterestSaleInfo> list = interestSaleService.getUserInterestList(userId);
-        System.out.println(list);
         return list;
     }
 
-    @GetMapping("/getInterests")
-    List<InterestSaleDTO> getInterests(){
-        String userId = "test";
-        if (userId == null) return null;
-
+    @PostMapping("/getInterests")
+    List<InterestSaleDTO> getInterests(@RequestBody User user){
+        if (user == null) return null;
+        String userId = user.getUserId();
         List<InterestSaleDTO> list = interestSaleService.getInterests(userId);
         return list;
     }
