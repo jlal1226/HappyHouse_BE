@@ -5,12 +5,14 @@ import com.ssafy.domain.user.LoginDto;
 import com.ssafy.domain.user.User;
 import com.ssafy.domain.user.UserModifyRequestDto;
 
+import java.sql.SQLException;
+
 public interface UserService {
     User loginProcess(LoginDto dto) throws Exception;
 
     int join(JoinDto dto);
 
-    int findUserByUserId(String userId);
+    User findUserByUserId(String userId) throws Exception;
 
     int delete(String userId);
 

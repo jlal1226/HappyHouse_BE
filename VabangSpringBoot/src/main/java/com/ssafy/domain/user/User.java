@@ -8,10 +8,11 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
-    String id;
     String userId;
     String password;
-    String username;
-    String address;
     String role;
+    String name;
+    String phone;
+    String address;
+    String joinDate;
 }

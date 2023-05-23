@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public int findUserByUserId(String userId) {
+    public User findUserByUserId(String userId) throws Exception {
         return mapper.findUserByUserId(userId);
     }
 

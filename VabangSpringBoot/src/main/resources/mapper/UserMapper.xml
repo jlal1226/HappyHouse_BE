@@ -4,23 +4,23 @@
 
 <mapper namespace="com.ssafy.mapper.UserMapper">
     <select id="login" parameterType="LoginDto" resultType="User">
-        select user_id, password from user_tb where user_id = #{userId} and password = #{password}
+        select user_id userId, password from user_tb where user_id = #{userId} and password = #{password}
     </select>
 
     <insert id="join" parameterType="JoinDto">
         insert user_tb (user_id, password, name, phone, address) values (#{userId}, #{password}, #{username}, #{address}, #{phone})
     </insert>
 
-    <select id="findUserByUserId" parameterType="String" resultType="int">
-        select count(*) from user_tb where userId = #{userid}
+    <select id="findUserByUserId" parameterType="String" resultType="User">
+        select user_id userId, name, role, address, phone from user_tb where user_id = #{userId}
     </select>
 
     <delete id="delete" parameterType="String">
-        delete from user_tb where userId = #{userId}
+        delete from user_tb where user_id = #{userId}
     </delete>
 
     <update id="modify" parameterType="UserModifyRequestDto">
-        update user_tb set userId = #{userId}, username= #{username}, address = #{address} where userId = #{userId}
+        update user_tb set user_id = #{userId}, username= #{username}, address = #{address} where user_id = #{userId}
     </update>
 
     <select id="getRefreshToken" parameterType="string" resultType="string">

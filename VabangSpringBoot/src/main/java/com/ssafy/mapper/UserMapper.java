@@ -15,7 +15,7 @@ public interface UserMapper {
 
     int join(JoinDto dto);
 
-    int findUserByUserId(String userId);
+    User findUserByUserId(String userId) throws SQLException;
 
     int delete(String userId);
 

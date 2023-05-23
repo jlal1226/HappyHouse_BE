@@ -6,13 +6,13 @@ import com.ssafy.domain.user.User;
 import com.ssafy.domain.user.UserModifyRequestDto;
 import com.ssafy.service.JwtService;
 import com.ssafy.service.UserService;
-import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,6 +21,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+
+    private static final String SUCCESS = "success";
+    private static final String FAIL = "fail";
 
     private final UserService service;
     private final JwtService jwtService;
@@ -39,6 +42,7 @@ public class UserController {
         log.info("로그인 시도됨");
         try {
             User user = service.loginProcess(dto);
+            log.info(user.getUserId());
             if (user != null) {
                 String accessToken = jwtService.createAccessToken("userid", user.getUserId());
                 String refreshToken = jwtService.createRefreshToken("userid", user.getUserId());
@@ -47,10 +51,10 @@ public class UserController {
                 log.debug("로그인 refreshToken 정보 : {}", refreshToken);
                 resultMap.put("access-token", accessToken);
                 resultMap.put("refresh-token", refreshToken);
-                resultMap.put("message", "SUCCESS");
+                resultMap.put("message", SUCCESS);
                 status = HttpStatus.ACCEPTED;
             } else {
-                resultMap.put("message", "FAIL");
+                resultMap.put("message", FAIL);
                 status = HttpStatus.ACCEPTED;
             }
 
@@ -78,8 +82,13 @@ public class UserController {
 
     @PostMapping("/join")
     public ResponseEntity<String> join(@RequestBody JoinDto dto) {
-        int duplicated = service.findUserByUserId(dto.getUserId());
-        if (duplicated != 0) {
+        User duplicated = null;
+        try {
+            duplicated = service.findUserByUserId(dto.getUserId());
+        } catch (Exception e) {
+            log.error("{}", e);
+        }
+        if (duplicated != null) {
             return new ResponseEntity<>("duplicated user id", HttpStatus.BAD_REQUEST);
         }
         int value = service.join(dto);
@@ -118,6 +127,32 @@ public class UserController {
         }
         session.invalidate();
         return new ResponseEntity<>("delete success", HttpStatus.OK);
+    }
+
+    @GetMapping("/info/{userId}")
+    public ResponseEntity<Map<String, Object>> getInfo(@PathVariable("userId") String userId, HttpServletRequest request) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+
+        if (jwtService.checkToken(request.getHeader("access-token"))) {
+            log.info("토큰 사용 가능");
+            try {
+                User user = service.findUserByUserId(userId);
+                resultMap.put("userInfo", user);
+                resultMap.put("message", SUCCESS);
+                status = HttpStatus.ACCEPTED;
+            } catch (Exception e) {
+                log.error("정보 조회 실패 : {}", e);
+                resultMap.put("message", e.getMessage());
+                status = HttpStatus.INTERNAL_SERVER_ERROR;
+            }
+        } else {
+            log.error("사용 불가능 토큰");
+            resultMap.put("message", FAIL);
+            status = HttpStatus.UNAUTHORIZED;
+        }
+
+        return new ResponseEntity<>(resultMap, status);
     }
 
 
