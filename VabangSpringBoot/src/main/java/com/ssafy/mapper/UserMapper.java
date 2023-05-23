@@ -23,5 +23,5 @@ public interface UserMapper {
 
     public void saveRefreshToken(Map<String, String> map);
     public Object getRefreshToken(String userid);
-    public void deleteRefreshToken(Map<String, String> map);
+    public void deleteRefreshToken(Map<String, String> map) throws SQLException;
 }
