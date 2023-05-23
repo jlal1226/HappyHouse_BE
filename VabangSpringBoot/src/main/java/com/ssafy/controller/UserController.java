@@ -69,10 +69,20 @@ public class UserController {
     }
 
     // 로그아웃
-    @GetMapping("/logout")
-    public ResponseEntity<String> logout(HttpSession session) {
-        session.invalidate();
-        return new ResponseEntity<>("logout success", HttpStatus.OK);
+    @GetMapping("/logout/{userId}")
+    public ResponseEntity<Map<String, Object>> logout(@PathVariable String userId) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+        try {
+            service.deleteRefreshToken(userId);
+            resultMap.put("message", SUCCESS);
+            status = HttpStatus.ACCEPTED;
+        } catch (Exception e) {
+            log.error("로그아웃 실패 : {}", e.getMessage());
+            resultMap.put("message", e.getMessage());
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        return new ResponseEntity<>(resultMap, status);
     }
 
     // 회원 가입
