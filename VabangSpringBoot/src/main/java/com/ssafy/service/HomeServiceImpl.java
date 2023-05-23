@@ -32,8 +32,4 @@ public class HomeServiceImpl implements HomeService {
         return homeMapper.getDealList(aptCode);
     }
 
-    @Override
-    public List<HouseDeal> getDealList(String aptCode) throws Exception{
-        return homeMapper.getDealList(aptCode);
-    }
 }
