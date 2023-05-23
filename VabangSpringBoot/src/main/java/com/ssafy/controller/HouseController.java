@@ -24,7 +24,7 @@ public class HouseController {
     	return regions;
     }
 
-    @PostMapping(value = "/search/")
+    @PostMapping(value = "/search")
     public List<HouseSearchResponseDTO> getList(@RequestBody SearchDTO search) throws Exception {
         List<HouseSearchResponseDTO> houseInfos = homeService.getList(search);
         return houseInfos;
