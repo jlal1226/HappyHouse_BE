@@ -13,4 +13,5 @@ public interface HomeService {
     List<HouseSearchResponseDTO> getList(SearchDTO search) throws Exception;
     List<HouseDeal> getDealList(String aptCode) throws Exception;
     List<RegionDTO> getRegions();
+
 }

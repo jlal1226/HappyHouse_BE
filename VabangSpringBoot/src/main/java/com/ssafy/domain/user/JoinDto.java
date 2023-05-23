@@ -14,4 +14,5 @@ public class JoinDto {
     String password;
     String username;
     String address;
+    String phone;
 }
