@@ -3,6 +3,7 @@ package com.ssafy.mapper;
 import com.ssafy.domain.HouseDeal;
 import com.ssafy.domain.HouseSearchResponseDTO;
 import com.ssafy.domain.RegionDTO;
+import com.ssafy.domain.SearchDTO;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -12,11 +13,8 @@ import java.util.Map;
 @Mapper
 public interface HomeMapper {
 
-    List<HouseSearchResponseDTO> getHouseSearchResponses(Map<String, String> keywordMap);
-    int insertInterest(String homeDealNo, String userId);
-    int deleteInterest(String homeDealNo, String userId);
-    int showDealDetail(String homeDealNo);//-> return type 바꿔야됨
+    List<HouseSearchResponseDTO> getList(SearchDTO search);
     List<RegionDTO> getRegions();
-    List<HouseSearchResponseDTO> searchHouseByRegion(RegionDTO region);
+
     List<HouseDeal> getDealList(String aptCode);
 }

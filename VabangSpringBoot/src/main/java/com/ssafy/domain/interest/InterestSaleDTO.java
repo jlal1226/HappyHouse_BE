@@ -1,4 +1,4 @@
-package com.ssafy.domain;
+package com.ssafy.domain.interest;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,12 +7,10 @@ import lombok.Setter;
 
 @Setter
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
-public class HouseSearchResponseDTO {
+@NoArgsConstructor
+public class InterestSaleDTO {
+    String id;
+    String userId;
     String aptCode;
-    String address;
-    String lat;
-    String lng;
-    String apartmentName;
 }

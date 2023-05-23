@@ -3,12 +3,22 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ssafy.mapper.HomeMapper">
-    <select id = "getHouseSearchResponses" parameterType="map" resultType = "HouseSearchResponseDTO">
-        select round(avg(hd.dealAmount), 3) avgDealAmount, round(avg(hd.area)) avgArea, max(hd.floor) maxFloor, hd.aptCode aptCode, tmp.lat lat, tmp.lng lng, tmp.apartmentName apartmentName, tmp.address address
-        from housedeal hd inner join (SELECT hi.aptCode, hi.apartmentName, concat(sidoName," ",gugunName, " ",dong, " ",roadName," ",jibun)  address, lng, lat
-                                        FROM houseinfo hi
-                                        INNER JOIN dongcode dc ON hi.dongCode = dc.dongCode
-                                        WHERE dc.dongName like #{keyword}) tmp on hd.aptCode = tmp.aptCode
+    <select id = "getList" parameterType="SearchDTO" resultType = "HouseSearchResponseDTO">
+        select hd.aptCode aptCode, tmp.lat lat, tmp.lng lng, tmp.apartmentName apartmentName, tmp.address address
+        from housedeal hd
+                 inner join (SELECT hi.aptCode, hi.apartmentName, lng, lat, concat(dc.sidoName, ' ', dc.gugunName, ' ', dc.dongName) address
+                             FROM houseinfo hi
+                                      INNER JOIN dongcode dc ON hi.dongCode = dc.dongCode
+                             WHERE dc.sidoName like concat('%', #{sidoName}, '%')
+                               and dc.gugunName like concat('%', #{gugunName}, '%')
+                               and dc.dongName like concat('%', #{dongName}, '%')
+                               and (hi.apartmentName like concat('%', #{keyword}, '%') or
+                                    dc.sidoName like concat('%', #{keyword}, '%') or
+                                    dc.gugunName like concat('%', #{keyword}, '%') or
+                                    dc.dongName like concat('%', #{keyword}, '%')
+                                 )
+                             ) tmp
+                            on hd.aptCode = tmp.aptCode
         group by hd.aptCode
     </select>
 
