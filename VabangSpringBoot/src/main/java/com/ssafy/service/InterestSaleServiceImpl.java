@@ -1,6 +1,7 @@
 package com.ssafy.service;
 
-import com.ssafy.domain.InterestSaleInfo;
+import com.ssafy.domain.interest.InterestSaleDTO;
+import com.ssafy.domain.interest.InterestSaleInfo;
 import com.ssafy.mapper.InterestSaleMapper;
 import java.util.List;
 import java.util.Map;
@@ -24,8 +25,14 @@ public class InterestSaleServiceImpl implements InterestSaleService{
     }
 
     @Override
-    public List<InterestSaleInfo> showInterests(String userId){
-        return interestSaleMapper.showInterests(userId);
+    public List<InterestSaleInfo> getUserInterestList(String userId) {
+        return interestSaleMapper.getUserInterestList(userId);
     }
+
+    @Override
+    public List<InterestSaleDTO> getInterests(String userId) {
+        return interestSaleMapper.getInterests(userId);
+    }
+
 
 }
