@@ -18,8 +18,8 @@ public interface UserService {
 
     int modify(UserModifyRequestDto dto);
 
-    public void saveRefreshToken(String userid, String refreshToken);
-    public Object getRefreshToken(String userid);
-    public void deleteRefreshToken(String userid);
+    public void saveRefreshToken(String userId, String refreshToken);
+    public Object getRefreshToken(String userId);
+    public void deleteRefreshToken(String userId) throws Exception;
 
 }

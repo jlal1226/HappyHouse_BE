@@ -47,22 +47,22 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void saveRefreshToken(String userid, String refreshToken) {
+    public void saveRefreshToken(String userId, String refreshToken) {
         Map<String, String> map = new HashMap<>();
-        map.put("user_id", userid);
+        map.put("user_id", userId);
         map.put("token", refreshToken);
         mapper.saveRefreshToken(map);
     }
 
     @Override
-    public Object getRefreshToken(String userid) {
-        return mapper.getRefreshToken(userid);
+    public Object getRefreshToken(String userId) {
+        return mapper.getRefreshToken(userId);
     }
 
     @Override
-    public void deleteRefreshToken(String userid) {
+    public void deleteRefreshToken(String userId) throws Exception{
         Map<String, String> map = new HashMap<String, String>();
-        map.put("userid", userid);
+        map.put("userid", userId);
         map.put("token", null);
         mapper.deleteRefreshToken(map);
 
