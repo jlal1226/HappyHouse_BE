@@ -11,8 +11,8 @@ public class User {
     String userId;
     String password;
     String role;
-    String username;
+    String name;
     String phone;
     String address;
-    String join_date;
+    String joinDate;
 }
