@@ -1,6 +1,7 @@
 package com.ssafy.config;
 
 import com.ssafy.interceptor.JwtInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -12,20 +13,22 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebMvc
 public class WebConfiguration implements WebMvcConfigurer {
 
+    @Autowired
+    JwtInterceptor jwtInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(new JwtInterceptor())
-//                 .addPathPatterns("/interest/**");
+        registry.addInterceptor(jwtInterceptor)
+                 .addPathPatterns("/interest/**");
     }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         // /interest/insert
-        registry.addMapping("/**").allowedOrigins("*")
-                .allowedMethods(HttpMethod.GET.name(), HttpMethod.POST.name(), HttpMethod.PUT.name(),
-                        HttpMethod.DELETE.name(), HttpMethod.HEAD.name(), HttpMethod.OPTIONS.name(),
-                        HttpMethod.PATCH.name())
-            .exposedHeaders("access-token")
+        registry.addMapping("/**")
+                .allowedOrigins("*")
+                .allowedMethods("*")
+                .exposedHeaders("access-token")
                 .maxAge(1800);
     }
 
