@@ -42,8 +42,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public int modify(UserModifyRequestDto dto) {
-        return mapper.modify(dto);
+    public int modify(User user) throws Exception{
+        return mapper.modify(user);
     }
 
     @Override

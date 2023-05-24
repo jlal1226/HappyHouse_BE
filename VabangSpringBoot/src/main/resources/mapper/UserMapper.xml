@@ -8,19 +8,19 @@
     </select>
 
     <insert id="join" parameterType="User">
-        insert user_tb (user_id, password, name, phone, address, email) values (#{userId}, #{password}, #{name}, #{address}, #{phone}, #{email})
+        insert user_tb (user_id, password, name, address, phone, email) values (#{userId}, #{password}, #{name}, #{address}, #{phone}, #{email})
     </insert>
 
     <select id="findUserByUserId" parameterType="String" resultType="User">
-        select user_id userId, name, role, address, phone from user_tb where user_id = #{userId}
+        select user_id userId, name, role, phone, address, email from user_tb where user_id = #{userId}
     </select>
 
     <delete id="delete" parameterType="String">
         delete from user_tb where user_id = #{userId}
     </delete>
 
-    <update id="modify" parameterType="UserModifyRequestDto">
-        update user_tb set user_id = #{userId}, username= #{username}, address = #{address} where user_id = #{userId}
+    <update id="modify" parameterType="User">
+        update user_tb set name = #{name}, email = #{email}, phone = #{phone} where user_id = #{userId}
     </update>
 
     <select id="getRefreshToken" parameterType="string" resultType="string">

@@ -43,7 +43,6 @@ public class UserController {
         log.info("로그인 시도됨");
         try {
             User user = service.loginProcess(dto);
-            log.info(user.getUserId());
             if (user != null) {
                 String accessToken = jwtService.createAccessToken("userid", user.getUserId());
                 String refreshToken = jwtService.createRefreshToken("userid", user.getUserId());
@@ -115,18 +114,27 @@ public class UserController {
 
     // 회원 정보 수정
     @PutMapping("")
-    public ResponseEntity<String> modify(HttpSession session, @RequestBody UserModifyRequestDto dto) {
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            return new ResponseEntity<>("session is null", HttpStatus.NO_CONTENT);
+    public ResponseEntity<Map<String, Object>> modify(@RequestBody User user) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+        log.info("UserController modify");
+        try {
+            int value = service.modify(user);
+            log.info("{}", value);
+            System.out.println(value);
+            if (value == 1) {
+                resultMap.put("message", SUCCESS);
+            } else {
+                resultMap.put("message", FAIL);
+            }
+            status = HttpStatus.ACCEPTED;
+        } catch (Exception e) {
+            log.error("회원 정보 수정 실패 : {}", e);
+            resultMap.put("message", e.getMessage());
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
-        dto.setUserId(user.getUserId());
-        int modify = service.modify(dto);
 
-        if (modify != 0) {
-            return new ResponseEntity<>("modify success", HttpStatus.OK);
-        }
-        return new ResponseEntity<>("modify fail", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(resultMap, status);
     }
 
     // 회원 탈퇴

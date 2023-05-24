@@ -16,7 +16,7 @@ public interface UserService {
 
     int delete(String userId);
 
-    int modify(UserModifyRequestDto dto);
+    int modify(User user) throws Exception;
 
     public void saveRefreshToken(String userId, String refreshToken);
     public Object getRefreshToken(String userId);

@@ -19,7 +19,7 @@ public interface UserMapper {
 
     int delete(String userId);
 
-    int modify(UserModifyRequestDto dto);
+    int modify(User user) throws SQLException;
 
     public void saveRefreshToken(Map<String, String> map);
     public Object getRefreshToken(String userid);
