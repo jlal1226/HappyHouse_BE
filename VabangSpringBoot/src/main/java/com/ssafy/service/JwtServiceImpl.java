@@ -22,17 +22,17 @@ public class JwtServiceImpl implements JwtService{
 
 
     private static final String SALT = System.getenv("SALT");
-    private static final int ACCESS_TOKEN_EXPIRE_MINUTES = 100; // 분단위
-    private static final int REFRESH_TOKEN_EXPIRE_MINUTES = 2; // 주단위
+    private static final int ACCESS_TOKEN_EXPIRE_MINUTES = 1; // 분단위
+    private static final int REFRESH_TOKEN_EXPIRE_MINUTES = 1; // 주단위
 
     @Override
     public <T> String createAccessToken(String key, T data) {
-        return create(key, data, "access-token", 1000 * 10 * ACCESS_TOKEN_EXPIRE_MINUTES);
+        return create(key, data, "access-token", 1000 * 60 * ACCESS_TOKEN_EXPIRE_MINUTES);
     }
 
     @Override
     public <T> String createRefreshToken(String key, T data) {
-        return create(key, data, "refresh-token", 1000 * 30 * REFRESH_TOKEN_EXPIRE_MINUTES);
+        return create(key, data, "refresh-token", 1000 * 3600 * 24 * 7 * REFRESH_TOKEN_EXPIRE_MINUTES);
 
     }
 

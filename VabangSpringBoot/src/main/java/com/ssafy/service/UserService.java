@@ -10,7 +10,7 @@ import java.sql.SQLException;
 public interface UserService {
     User loginProcess(LoginDto dto) throws Exception;
 
-    int join(JoinDto dto);
+    int join(User user);
 
     User findUserByUserId(String userId) throws Exception;
 

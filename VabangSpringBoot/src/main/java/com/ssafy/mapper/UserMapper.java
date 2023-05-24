@@ -13,7 +13,7 @@ import java.util.Map;
 public interface UserMapper {
     User login(LoginDto dto) throws SQLException;
 
-    int join(JoinDto dto);
+    int join(User user);
 
     User findUserByUserId(String userId) throws SQLException;
 

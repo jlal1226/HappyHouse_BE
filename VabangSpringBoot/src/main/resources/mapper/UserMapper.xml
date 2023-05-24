@@ -7,8 +7,8 @@
         select user_id userId, password from user_tb where user_id = #{userId} and password = #{password}
     </select>
 
-    <insert id="join" parameterType="JoinDto">
-        insert user_tb (user_id, password, name, phone, address) values (#{userId}, #{password}, #{username}, #{address}, #{phone})
+    <insert id="join" parameterType="User">
+        insert user_tb (user_id, password, name, phone, address, email) values (#{userId}, #{password}, #{name}, #{address}, #{phone}, #{email})
     </insert>
 
     <select id="findUserByUserId" parameterType="String" resultType="User">
