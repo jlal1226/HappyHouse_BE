@@ -2,7 +2,6 @@ package com.ssafy.interceptor;
 
 import com.ssafy.exception.UnAuthorizedException;
 import com.ssafy.service.JwtService;
-import org.apache.tomcat.util.buf.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +29,7 @@ public class JwtInterceptor implements HandlerInterceptor {
             return true;
         }
         final String token = request.getHeader(HEADER_AUTH);
+
         if (token != null && jwtService.checkToken(token)) {
             return true;
         } else {
