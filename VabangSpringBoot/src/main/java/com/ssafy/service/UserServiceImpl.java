@@ -27,8 +27,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public int join(JoinDto dto) {
-        return mapper.join(dto);
+    public int join(User user) {
+        return mapper.join(user);
     }
 
     @Override

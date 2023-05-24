@@ -92,21 +92,25 @@ public class UserController {
     }
 
     @PostMapping("/join")
-    public ResponseEntity<String> join(@RequestBody JoinDto dto) {
-        User duplicated = null;
+    public ResponseEntity<Map<String, Object>> join(@RequestBody User user) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+        log.info("UserController join");
         try {
-            duplicated = service.findUserByUserId(dto.getUserId());
+            int value = service.join(user);
+            if (value == 1) {
+                resultMap.put("message", SUCCESS);
+            } else {
+                resultMap.put("message", FAIL);
+            }
+            status = HttpStatus.ACCEPTED;
         } catch (Exception e) {
-            log.error("{}", e);
+            log.error("로그인 실패 : {}", e);
+            resultMap.put("message", e.getMessage());
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
-        if (duplicated != null) {
-            return new ResponseEntity<>("duplicated user id", HttpStatus.BAD_REQUEST);
-        }
-        int value = service.join(dto);
-        if (value != 0) {
-            return new ResponseEntity<>("join success", HttpStatus.OK);
-        }
-        return new ResponseEntity<>("join fail", HttpStatus.BAD_REQUEST);
+
+        return new ResponseEntity<>(resultMap, status);
     }
 
     // 회원 정보 수정
@@ -166,5 +170,50 @@ public class UserController {
         return new ResponseEntity<>(resultMap, status);
     }
 
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refreshToken(@RequestBody User user, HttpServletRequest request)
+            throws Exception {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = HttpStatus.ACCEPTED;
+        String token = request.getHeader("refresh-token");
+        log.debug("token : {}, memberDto : {}", token, user);
+        if (jwtService.checkToken(token)) {
+            if (token.equals(service.getRefreshToken(user.getUserId()))) {
+                String accessToken = jwtService.createAccessToken("userid", user.getUserId());
+                log.debug("token : {}", accessToken);
+                log.debug("정상적으로 액세스토큰 재발급!!!");
+                resultMap.put("access-token", accessToken);
+                resultMap.put("message", SUCCESS);
+                status = HttpStatus.ACCEPTED;
+            }
+        } else {
+            log.debug("리프레쉬토큰도 사용불!!!!!!!");
+            status = HttpStatus.UNAUTHORIZED;
+        }
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
+    }
 
+    @GetMapping("/{userId}")
+    public ResponseEntity<Map<String, Object>> checkUserId(@PathVariable("userId") String userId) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+        try {
+            User user = service.findUserByUserId(userId);
+            if (user == null) {
+                resultMap.put("isValidID", true);
+                resultMap.put("message", SUCCESS);
+            } else {
+                resultMap.put("isValidID", false);
+                resultMap.put("message", FAIL);
+            }
+            status = HttpStatus.ACCEPTED;
+        } catch (Exception e) {
+            log.error("정보 조회 실패 : {}", e);
+            resultMap.put("message", e.getMessage());
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+
+        return new ResponseEntity<>(resultMap, status);
+    }
 }
