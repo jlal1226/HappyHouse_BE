@@ -14,7 +14,7 @@ public interface UserService {
 
     User findUserByUserId(String userId) throws Exception;
 
-    int delete(String userId);
+    int delete(String userId) throws Exception;
 
     int modify(User user) throws Exception;
 

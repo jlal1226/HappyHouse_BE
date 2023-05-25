@@ -85,11 +85,6 @@ public class UserController {
     }
 
     // 회원 가입
-    @GetMapping("/join")
-    public String join() {
-        return "join";
-    }
-
     @PostMapping("/join")
     public ResponseEntity<Map<String, Object>> join(@RequestBody User user) {
         Map<String, Object> resultMap = new HashMap<>();
@@ -138,18 +133,29 @@ public class UserController {
     }
 
     // 회원 탈퇴
-    @DeleteMapping("")
-    public ResponseEntity<String> delete(HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            return new ResponseEntity<>("session is null", HttpStatus.NO_CONTENT);
+    @DeleteMapping("{userId}")
+    public ResponseEntity<Map<String, Object>> delete(@PathVariable String userId) {
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status = null;
+        log.info("userId : {}", userId);
+        log.info("UserController modify");
+        try {
+            int value = service.delete(userId);
+            log.info("{}", value);
+            System.out.println(value);
+            if (value == 1) {
+                resultMap.put("message", SUCCESS);
+            } else {
+                resultMap.put("message", FAIL);
+            }
+            status = HttpStatus.ACCEPTED;
+        } catch (Exception e) {
+            log.error("회원 정보 수정 실패 : {}", e);
+            resultMap.put("message", e.getMessage());
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
         }
-        int value = service.delete(user.getUserId());
-        if (value == 0) {
-            return new ResponseEntity<>("delete fail", HttpStatus.NO_CONTENT);
-        }
-        session.invalidate();
-        return new ResponseEntity<>("delete success", HttpStatus.OK);
+
+        return new ResponseEntity<>(resultMap, status);
     }
 
     @GetMapping("/info/{userId}")

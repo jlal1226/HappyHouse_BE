@@ -17,7 +17,7 @@ public interface UserMapper {
 
     User findUserByUserId(String userId) throws SQLException;
 
-    int delete(String userId);
+    int delete(String userId) throws SQLException;
 
     int modify(User user) throws SQLException;
 
