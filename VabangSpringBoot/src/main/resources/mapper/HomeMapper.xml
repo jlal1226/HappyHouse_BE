@@ -40,8 +40,6 @@
         and gugunName = #{gugunName}
         and dongName = #{dongName}
         group by hi.aptCode;
-
-
     </select>
 
     <select id = "getDealList" resultType="HouseDeal" parameterType="string">
