@@ -34,15 +34,14 @@
     </select>
 
     <select id = "searchHouseByRegion" resultType= "HouseSearchResponseDTO">
-        select round(avg(hd.dealAmount), 3) avgDealAmount, round(avg(hd.area)) avgArea, max(hd.floor) maxFloor, hd.aptCode aptCode, tmp.lat lat, tmp.lng lng, tmp.apartmentName apartmentName, tmp.address address
-        from housedeal hd inner join (SELECT hi.aptCode, hi.apartmentName, concat(sidoName," ",gugunName, " ",dong, " ",roadName," ",jibun)  address, lng, lat
-                                      FROM houseinfo hi
-                                      INNER JOIN dongcode dc ON hi.dongCode = dc.dongCode
-                                      WHERE dc.sidoName = #{sidoName}
-                                      and dc.gugunName = #{gugunName}
-                                      and dc.dongName  = #{dongName}
-                                      ) tmp on hd.aptCode = tmp.aptCode
-        group by hd.aptCode
+        select round(avg(hd.dealAmount), 3) avgDealAmount, round(avg(hd.area)) avgArea, concat(sidoName," ",gugunName, " ",dong, " ",roadName," ",jibun)  address, hi.aptCode, buildYear, apartmentName, lat, lng
+        from housedeal hd left join houseinfo hi on hd.aptCode = hi.aptCode left join dongcode dc on dc.dongCode = hi.dongCode
+        where sidoName = #{sidoName}
+        and gugunName = #{gugunName}
+        and dongName = #{dongName}
+        group by hi.aptCode;
+
+
     </select>
 
     <select id = "getDealList" resultType="HouseDeal" parameterType="string">
