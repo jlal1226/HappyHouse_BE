@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.ssafy.mapper.BoardMapper">
+
+	<insert id="writeArticle" parameterType="boardDto">
+		insert into board_tb (user_id, title, content, hit, created_date)
+		values (#{user_id}, #{title}, #{content}, 0, now())
+	</insert>
+	
+	<select id="listArticle" parameterType="map" resultType="boardDto">
+		select board_id, user_id, title, content, hit,
+				case when date_format(created_date, '%Y%m%d') = date_format(now(), '%Y%m%d')
+				then date_format(created_date, '%H:%i:%s')
+				else date_format(created_date, '%y.%m.%d')
+				end created_date
+		from board_tb
+		<if test="word != null and word != ''">
+			<if test="key == 'title'">
+				where title like concat('%', #{word}, '%')
+			</if>
+			<if test="key != 'title'">
+				where ${key} = #{word}
+			</if>
+		</if>
+		order by board_id desc
+		limit #{start}, #{spp}
+	</select>
+	
+	<select id="getTotalCount" parameterType="map" resultType="int">
+		select count(board_id)
+		from board_tb
+		<if test="word != null and word != ''">
+			<if test="key == 'title'">
+				where title like concat('%', #{word}, '%')
+			</if>
+			<if test="key != 'title'">
+				where ${key} = #{word}
+			</if>
+		</if>
+	</select>
+	
+	<select id="getArticle" parameterType="int" resultType="boardDto">
+		select board_id, user_id, title, content, hit, created_date
+		from board_tb
+		where board_id = #{board_id}
+	</select>
+	
+	<update id="updateHit" parameterType="int">
+		update board_tb
+		set hit = hit + 1
+		where board_id = #{board_id}
+	</update>
+	
+	<update id="modifyArticle" parameterType="boardDto">
+		update board_tb
+		set title = #{title}, content = #{content}
+		where board_id = #{board_id}
+	</update>
+	
+	<delete id="deleteMemo" parameterType="int">
+		delete from memo
+		where board_id = #{board_id}
+	</delete>
+	
+	<delete id="deleteArticle" parameterType="int">
+		delete from board_tb
+		where board_id = #{board_id}
+	</delete>
+
+</mapper>
+
