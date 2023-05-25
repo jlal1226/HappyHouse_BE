@@ -11,15 +11,10 @@
         delete from interest_sale_tb where user_id=#{userId} and aptCode=#{aptCode}
     </delete>
     <select id = "getUserInterestList" parameterType="string" resultType="InterestSaleInfo">
-        select avgDealAmount, avgArea, i.aptCode aptCode, apartmentName aptName, address
-        from interest_sale_tb i inner join
-            (select round(avg(hd.dealAmount), 3) avgDealAmount, round(avg(hd.area)) avgArea, hd.aptCode, tmp.apartmentName apartmentName, address
-                                from housedeal hd inner join (SELECT hi.aptCode, hi.apartmentName, concat(sidoName," ",gugunName, " ",dong, " ",roadName," ",jibun)  address
-                                                                FROM houseinfo hi
-                                                                INNER JOIN dongcode dc ON hi.dongCode = dc.dongCode
-                                                            ) tmp on tmp.aptCode = hd.aptCode group by hd.aptCode
-                            ) tmp2 on i.aptCode = tmp2.aptCode
-        where i.user_id = #{userId}
+      select round(avg(hd.dealAmount), 3) avgDealAmount, round(avg(hd.area)) avgArea, hi.aptCode aptCode, apartmentName aptName, concat(sidoName," ",gugunName, " ",dong, " ",roadName," ",jibun)  address
+      from interest_sale_tb i inner join houseinfo hi on i.aptCode = hi.aptCode inner join housedeal hd on hd.aptCode = hi.aptCode left join dongcode dc on dc.dongCode = hi.dongCode
+      where i.user_id = #{userId}
+      group by hi.aptCode;
     </select>
     <select id = "getInterests" parameterType="string" resultType="InterestSaleDTO">
         select * from interest_sale_tb where user_id = #{userId};

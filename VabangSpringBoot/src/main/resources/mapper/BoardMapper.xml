@@ -59,11 +59,6 @@
 		where board_id = #{board_id}
 	</update>
 	
-	<delete id="deleteMemo" parameterType="int">
-		delete from memo
-		where board_id = #{board_id}
-	</delete>
-	
 	<delete id="deleteArticle" parameterType="int">
 		delete from board_tb
 		where board_id = #{board_id}
